@@ -10,4 +10,8 @@
 
 @interface ViewController : UIViewController
 
+@property(retain, nonatomic) IBOutlet UILabel * timeLabel;
+@property(retain, nonatomic) IBOutlet UIView * coverView;
+
+
 @end

@@ -18,6 +18,7 @@
 		BB34F1191703CAD4006EF991 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB34F1181703CAD4006EF991 /* Default-568h@2x.png */; };
 		BB34F11C1703CAD4006EF991 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB34F11A1703CAD4006EF991 /* MainStoryboard.storyboard */; };
 		BB34F11F1703CAD4006EF991 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB34F11E1703CAD4006EF991 /* ViewController.m */; };
+		BB34F1261703CB2B006EF991 /* digital-7.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB34F1251703CB2B006EF991 /* digital-7.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		BB34F11B1703CAD4006EF991 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		BB34F11D1703CAD4006EF991 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		BB34F11E1703CAD4006EF991 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		BB34F1251703CB2B006EF991 /* digital-7.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "digital-7.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 		BB34F1091703CAD4006EF991 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				BB34F1251703CB2B006EF991 /* digital-7.ttf */,
 				BB34F10A1703CAD4006EF991 /* AlarmClock-Info.plist */,
 				BB34F10B1703CAD4006EF991 /* InfoPlist.strings */,
 				BB34F10E1703CAD4006EF991 /* main.m */,
@@ -163,6 +166,7 @@
 				BB34F1171703CAD4006EF991 /* Default@2x.png in Resources */,
 				BB34F1191703CAD4006EF991 /* Default-568h@2x.png in Resources */,
 				BB34F11C1703CAD4006EF991 /* MainStoryboard.storyboard in Resources */,
+				BB34F1261703CB2B006EF991 /* digital-7.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
