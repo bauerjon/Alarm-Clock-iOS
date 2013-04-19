@@ -37,6 +37,7 @@
     
 	// Do any additional setup after loading the view.
     
+    //Edit mode is only true when an existing alarm is pressed
     if (self.editMode)
     {
         navItem.title = @"Edit Alarm";
@@ -56,7 +57,7 @@
 {
     if(self.editMode)
     {
-        return 2;
+        return 2;//for the delete button
     }
 	return 1;
 }
@@ -252,6 +253,7 @@
     
 }
 
+//Get Unique Notification ID for a new alarm O(n)
 -(int)getUniqueNotificationID
 {
     NSMutableDictionary * hashDict = [[NSMutableDictionary alloc]init];
@@ -278,7 +280,7 @@
 }
 
 // Delegate Methods From Edit Views
-
+// Add more delegates if you wish to add more feature edit views to the alarm
 - (void)updateLabelText:(NSString *)newLabel
 {
     self.label = newLabel;

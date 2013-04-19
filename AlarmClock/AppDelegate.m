@@ -2,9 +2,7 @@
 //  AppDelegate.m
 //  AlarmClock
 //
-//  Created by Jon Bauer on 3/27/13.
-//  Copyright (c) 2013 Jon Bauer. All rights reserved.
-//
+
 
 #import "AppDelegate.h"
 #import "HomeViewController.h"
@@ -14,10 +12,8 @@
 @synthesize player;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-    
-    
-    
+    //Prevents screen from locking
+    [UIApplication sharedApplication].idleTimerDisabled = YES;    
     UILocalNotification *localNotif =
     [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     
@@ -30,8 +26,7 @@
         self.window.rootViewController = rootViewController;
         [self.window makeKeyAndVisible];
     }
-    
-    
+        
     return YES;
 }
 

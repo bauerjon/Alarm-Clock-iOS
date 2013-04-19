@@ -2,9 +2,7 @@
 //  AlarmLabelEditViewController.h
 //  AlarmClock
 //
-//  Created by Jon Bauer on 4/16/13.
-//  Copyright (c) 2013 Jon Bauer. All rights reserved.
-//
+
 
 #import <UIKit/UIKit.h>
 

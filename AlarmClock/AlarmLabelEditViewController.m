@@ -2,9 +2,7 @@
 //  AlarmLabelEditViewController.m
 //  AlarmClock
 //
-//  Created by Jon Bauer on 4/16/13.
-//  Copyright (c) 2013 Jon Bauer. All rights reserved.
-//
+
 
 #import "AlarmLabelEditViewController.h"
 
@@ -16,6 +14,7 @@
 
 @synthesize delegate;
 @synthesize label;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -90,15 +89,8 @@
     [self dismissViewControllerAnimated:YES completion:nil];
     
 }
-//-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-//    if([segue.identifier isEqualToString:@"LabelEditToAddAlarm"]){
-//        AddAlarmViewController *controller = (AddAlarmViewController *)segue.destinationViewController;
-//        controller.label = [[NSString alloc] init];
-//        controller.label = labelField.text;
-//    }
-//}
+
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
-    //[textField resignFirstResponder];
     [self saveAlarmLabel:nil];
     return YES;
 }

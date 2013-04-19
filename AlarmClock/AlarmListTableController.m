@@ -1,29 +1,19 @@
 //
-//  EasyCustomTableController.m
-//  EasyCustomTable
+//  AlarmListTableController.m
+//  AlarmListTableController
 //
-//  Created by Matt Gallagher on 27/04/09.
-//  Copyright 2009 Matt Gallagher. All rights reserved.
-//
-//  Permission is given to use this source code file, free of charge, in any
-//  project, commercial or otherwise, entirely at your risk, with the condition
-//  that any redistribution (in part or whole) of source code must retain
-//  this copyright and permission notice. Attribution in compiled projects is
-//  appreciated but not required.
-//
+
 
 #import "AlarmListTableController.h"
 #import "AlarmObject.h"
 #import "AddEditAlarmViewController.h"
 
-#define USE_CUSTOM_DRAWING 1
 
 @implementation AlarmListTableController
 
 @synthesize tableView;
 @synthesize imageView;
 @synthesize listOfAlarms;
-#if USE_CUSTOM_DRAWING
 
 //
 // viewDidLoad
@@ -32,10 +22,7 @@
 //
 - (void)viewDidLoad
 {
-	//
-	// Change the properties of the imageView and tableView (these could be set
-	// in interface builder instead).
-	//
+
 	tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	tableView.rowHeight = 70;
 	tableView.backgroundColor = [UIColor clearColor];
@@ -48,7 +35,6 @@
 
 }
 
-#endif
 
 //
 // numberOfSectionsInTableView:
@@ -117,13 +103,6 @@
 		//
 		cell =[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:CellIdentifier];
-
-        //incase we want to add an image to the cells
-//		UIImage *indicatorImage = [UIImage imageNamed:@"indicator.png"];
-//		cell.accessoryView =
-//			[[[UIImageView alloc]
-//				initWithImage:indicatorImage]
-//			autorelease];
 
 		//
 		// Create the label for the top row of text
@@ -210,13 +189,7 @@
         currentAlarm.enabled = YES;
         if (!localNotification)
             return;
-        
-        // Current date
-        //NSDate *date = [NSDate date];
-        
-        // Add one minute to the current time
-        //NSDate *dateToFire = timeToSetOff.date;
-        
+
         localNotification.repeatInterval = NSDayCalendarUnit;
         [localNotification setFireDate:currentAlarm.timeToSetOff];
         [localNotification setTimeZone:[NSTimeZone defaultTimeZone]];
