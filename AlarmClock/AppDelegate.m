@@ -7,13 +7,31 @@
 //
 
 #import "AppDelegate.h"
+#import "HomeViewController.h"
 
 @implementation AppDelegate
 
 @synthesize player;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+    
+    
+    
+    UILocalNotification *localNotif =
+    [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    
+    if (localNotif)
+    {
+        self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        HomeViewController *rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"HomeView"];
+        rootViewController.alarmGoingOff = YES;
+        self.window.rootViewController = rootViewController;
+        [self.window makeKeyAndVisible];
+    }
+    
+    
     return YES;
 }
 
@@ -22,10 +40,18 @@
     
     NSURL *file = [[NSURL alloc] initFileURLWithPath:path];   
     
-    self->player =[[AVAudioPlayer alloc] initWithContentsOfURL:file error:nil];    
-    [self->player prepareToPlay];
-    [self->player play];
+    self.player =[[AVAudioPlayer alloc] initWithContentsOfURL:file error:nil];
+    [self.player prepareToPlay];
+    [self.player play];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    HomeViewController *rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"HomeView"];
+    rootViewController.alarmGoingOff = YES;
+    self.window.rootViewController = rootViewController;
+    [self.window makeKeyAndVisible];
 }
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

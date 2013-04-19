@@ -11,5 +11,5 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (nonatomic, retain) AVAudioPlayer *player;
+@property (nonatomic, strong) AVAudioPlayer *player;
 @end

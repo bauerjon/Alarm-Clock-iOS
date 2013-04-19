@@ -101,7 +101,6 @@
 		BB34F0F61703CAD3006EF991 = {
 			isa = PBXGroup;
 			children = (
-				BBFD0EC9171FA4CF00F7C664 /* AVFoundation.framework */,
 				BB34F1081703CAD3006EF991 /* AlarmClock */,
 				BB34F1011703CAD3006EF991 /* Frameworks */,
 				BB34F1001703CAD3006EF991 /* Products */,
@@ -119,6 +118,7 @@
 		BB34F1011703CAD3006EF991 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BBFD0EC9171FA4CF00F7C664 /* AVFoundation.framework */,
 				BB34F1021703CAD3006EF991 /* UIKit.framework */,
 				BB34F1041703CAD3006EF991 /* Foundation.framework */,
 				BB34F1061703CAD3006EF991 /* CoreGraphics.framework */,

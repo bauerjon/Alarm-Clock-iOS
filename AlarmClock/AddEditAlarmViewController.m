@@ -21,7 +21,7 @@
 @synthesize timeToSetOff;
 @synthesize label;
 @synthesize navItem;
-
+@synthesize notificationID;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -36,6 +36,7 @@
     [super viewDidLoad];
     
 	// Do any additional setup after loading the view.
+    
     if (self.editMode)
     {
         navItem.title = @"Edit Alarm";
@@ -45,7 +46,8 @@
         NSMutableArray *alarmList = [NSKeyedUnarchiver unarchiveObjectWithData:alarmListData];
         AlarmObject * oldAlarmObject = [alarmList objectAtIndex:self.indexOfAlarmToEdit];
         self.label = oldAlarmObject.label;
-        timeToSetOff.date = oldAlarmObject.timeToSetOff;  
+        timeToSetOff.date = oldAlarmObject.timeToSetOff;
+        self.notificationID = oldAlarmObject.notificationID;
         
     }
 
@@ -129,11 +131,43 @@
     }
 }
 
+- (void)CancelExistingNotification
+{
+    //cancel alarm
+    UIApplication *app = [UIApplication sharedApplication];
+    NSArray *eventArray = [app scheduledLocalNotifications];
+    for (int i=0; i<[eventArray count]; i++)
+    {
+        UILocalNotification* oneEvent = [eventArray objectAtIndex:i];
+        NSDictionary *userInfoCurrent = oneEvent.userInfo;
+        NSString *uid=[NSString stringWithFormat:@"%@",[userInfoCurrent valueForKey:@"notificationID"]];
+        if ([uid isEqualToString:[NSString stringWithFormat:@"%i",self.notificationID]])
+        {
+            //Cancelling local notification
+            
+            [app cancelLocalNotification:oneEvent];
+            break;
+        }
+    }
+}
+
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if(buttonIndex == 0)
     {
+        //cancel alarm
+        [self CancelExistingNotification];
         //delete alarm
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSData *alarmListData = [defaults objectForKey:@"AlarmListData"];
+        NSMutableArray *alarmList = [NSKeyedUnarchiver unarchiveObjectWithData:alarmListData];
+        [alarmList removeObjectAtIndex: self.indexOfAlarmToEdit];
+        NSData *alarmListData2 = [NSKeyedArchiver archivedDataWithRootObject:alarmList];
+        [[NSUserDefaults standardUserDefaults] setObject:alarmListData2 forKey:@"AlarmListData"];
+        
+        
+        
+        [self performSegueWithIdentifier: @"AlarmListSegue" sender: self];
     }
     else{
         //do nothing
@@ -155,53 +189,92 @@
     {
         newAlarmObject = [alarmList objectAtIndex:self.indexOfAlarmToEdit];
         
+        [self CancelExistingNotification];
     }
     else//Adding a new alarm
     {
-        newAlarmObject = [[AlarmObject alloc]init];               
+        newAlarmObject = [[AlarmObject alloc]init];
+        newAlarmObject.enabled = YES;
+        newAlarmObject.notificationID = [self getUniqueNotificationID];
     }
     
     newAlarmObject.label = self.label;
     newAlarmObject.timeToSetOff = timeToSetOff.date;
     newAlarmObject.enabled = YES;
     
+    [self scheduleLocalNotificationWithDate:self.timeToSetOff.date atIndex:newAlarmObject.notificationID];
     
     if(self.editMode == NO){
-    [alarmList addObject:newAlarmObject];
+        [alarmList addObject:newAlarmObject];
+        
+        
     }
-    
     NSData *alarmListData2 = [NSKeyedArchiver archivedDataWithRootObject:alarmList];
     [[NSUserDefaults standardUserDefaults] setObject:alarmListData2 forKey:@"AlarmListData"];
-
-    [self scheduleLocalNotificationWithDate:self.timeToSetOff.date];
+    
+   
     
     [self performSegueWithIdentifier: @"AlarmListSegue" sender: self];
 }
 
-- (void)scheduleLocalNotificationWithDate:(NSDate *)fireDate {    
+- (void)scheduleLocalNotificationWithDate:(NSDate *)fireDate
+                                  atIndex:(int)indexOfObject {
     
     UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+    
     
     if (!localNotification)
         return;
     
-    // Current date
-    //NSDate *date = [NSDate date];
-    
-    // Add one minute to the current time
-    //NSDate *dateToFire = timeToSetOff.date;
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"hh-mm -a";
+    NSDate* date = [dateFormatter dateFromString:[dateFormatter stringFromDate:timeToSetOff.date]];
     
     localNotification.repeatInterval = NSDayCalendarUnit;
-    [localNotification setFireDate:timeToSetOff.date];
+    [localNotification setFireDate:date];
     [localNotification setTimeZone:[NSTimeZone defaultTimeZone]];  
     // Setup alert notification
     [localNotification setAlertBody:@"Alarm" ];
     [localNotification setAlertAction:@"Open App"];
     [localNotification setHasAction:YES];
     
+    NSLog(@"%@", date);
+    //This array maps the alarms uid to the index of the alarm so that we can cancel specific local notifications
+
+    NSNumber* uidToStore = [NSNumber numberWithInt:indexOfObject];
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:uidToStore forKey:@"notificationID"];
+    localNotification.userInfo = userInfo;
+    NSLog(@"Uid Store in userInfo %@", [localNotification.userInfo objectForKey:@"notificationID"]);
     
     // Schedule the notification
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    
+    
+}
+
+-(int)getUniqueNotificationID
+{
+    NSMutableDictionary * hashDict = [[NSMutableDictionary alloc]init];
+    UIApplication *app = [UIApplication sharedApplication];
+    NSArray *eventArray = [app scheduledLocalNotifications];
+    for (int i=0; i<[eventArray count]; i++)
+    {
+        UILocalNotification* oneEvent = [eventArray objectAtIndex:i];
+        NSDictionary *userInfoCurrent = oneEvent.userInfo;
+        NSNumber *uid= [userInfoCurrent valueForKey:@"notificationID"];
+        NSNumber * value =[NSNumber numberWithInt:1];       
+        [hashDict setObject:value forKey:uid];
+    }
+    for (int i=0; i<[eventArray count]+1; i++)
+    {
+        NSNumber * value = [hashDict objectForKey:[NSNumber numberWithInt:i]];
+        if(!value)
+        {
+            return i;
+        }
+    }
+    return 0;
+    
 }
 
 // Delegate Methods From Edit Views

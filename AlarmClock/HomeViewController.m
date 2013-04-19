@@ -7,6 +7,7 @@
 //
 
 #import "HomeViewController.h"
+#import "AppDelegate.h"
 
 @interface HomeViewController ()
 
@@ -22,16 +23,7 @@
 @synthesize second2Label;
 @synthesize colon1;
 @synthesize colon2;
-@synthesize dhour1Label;
-@synthesize dhour2Label;
-@synthesize dminute1Label;
-@synthesize dminute2Label;
-@synthesize dsecond1Label;
-@synthesize dsecond2Label;
-@synthesize dcolon1;
-@synthesize dcolon2;
-
-@synthesize coverView;
+@synthesize alarmGoingOff;
 
 - (void)viewDidLoad
 {
@@ -46,8 +38,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    //NSLog(@"%@", [UIFont familyNames]);
-    
+
     colon1.font = [UIFont fontWithName:@"digital-7" size:90];
     colon2.font = [UIFont fontWithName:@"digital-7" size:90];
     hour1Label.font = [UIFont fontWithName:@"digital-7" size:90];
@@ -56,30 +47,30 @@
     hour2Label.font = [UIFont fontWithName:@"digital-7" size:90];
     minute2Label.font = [UIFont fontWithName:@"digital-7" size:90];
     second2Label.font = [UIFont fontWithName:@"digital-7" size:90];
-    
-    dcolon1.font = [UIFont fontWithName:@"digital-7" size:90];
-    dcolon2.font = [UIFont fontWithName:@"digital-7" size:90];
-    dhour1Label.font = [UIFont fontWithName:@"digital-7" size:90];
-    dminute1Label.font = [UIFont fontWithName:@"digital-7" size:90];
-    dsecond1Label.font = [UIFont fontWithName:@"digital-7" size:90];
-    dhour2Label.font = [UIFont fontWithName:@"digital-7" size:90];
-    dminute2Label.font = [UIFont fontWithName:@"digital-7" size:90];
-    dsecond2Label.font = [UIFont fontWithName:@"digital-7" size:90];
+
 }
 
-
+-(void)viewDidAppear:(BOOL)animated
+{
+    if(self.alarmGoingOff)
+    {
+        UIAlertView *alarmAlert = [[UIAlertView alloc] initWithTitle:@"Alarm Going Off"
+                                                             message:@"Press okay to stop"
+                                                            delegate:self
+                                                   cancelButtonTitle:@"okay"
+                                                   otherButtonTitles:nil, nil];
+        [alarmAlert show];
+    }
+}
 -(void)myTimerAction
 {
     NSDate *date = [NSDate date];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     
-    [dateFormatter setDateFormat:@"hh:mm:ss a"];
+    [dateFormatter setDateFormat:@"hh:mm a"];
     NSString *hourMinuteSecond = [dateFormatter stringFromDate:date];
-//    if([[hourMinuteSecond substringWithRange:NSMakeRange(0, 1)]isEqual: @"0"])
-//    {
-//        hour1Label.text = @"";
-//    }
+
     hour1Label.text = [hourMinuteSecond substringWithRange:NSMakeRange(0, 1)];
     hour2Label.text = [hourMinuteSecond substringWithRange:NSMakeRange(1, 1)];
     minute1Label.text = [hourMinuteSecond substringWithRange:NSMakeRange(3, 1)];
@@ -91,6 +82,18 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 0)
+    {
+        AppDelegate * myAppDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+        [myAppDelegate.player stop];
+    }
+    else{
+        //do nothing
+    }
 }
 
 @end

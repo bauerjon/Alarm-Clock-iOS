@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HomeViewController : UIViewController
+@interface HomeViewController : UIViewController<UIAlertViewDelegate>
 
 @property(strong, nonatomic) IBOutlet UILabel * hour1Label;
 @property(strong, nonatomic) IBOutlet UILabel * hour2Label;
@@ -18,16 +18,7 @@
 @property(strong, nonatomic) IBOutlet UILabel * second2Label;
 @property(strong, nonatomic) IBOutlet UILabel * colon1;
 @property(strong, nonatomic) IBOutlet UILabel * colon2;
-
-@property(strong, nonatomic) IBOutlet UILabel * dhour1Label;
-@property(strong, nonatomic) IBOutlet UILabel * dhour2Label;
-@property(strong, nonatomic) IBOutlet UILabel * dminute1Label;
-@property(strong, nonatomic) IBOutlet UILabel * dminute2Label;
-@property(strong, nonatomic) IBOutlet UILabel * dsecond1Label;
-@property(strong, nonatomic) IBOutlet UILabel * dsecond2Label;
-@property(strong, nonatomic) IBOutlet UILabel * dcolon1;
-@property(strong, nonatomic) IBOutlet UILabel * dcolon2;
-@property(strong, nonatomic) IBOutlet UIView * coverView;
+@property(nonatomic) BOOL alarmGoingOff;
 
 
 @end

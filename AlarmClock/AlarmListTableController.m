@@ -79,8 +79,10 @@
     [self performSegueWithIdentifier:@"AlarmListToEditAlarm" sender:self];
     
 }
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    if([segue.identifier isEqualToString:@"AlarmListToEditAlarm"]){
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if([segue.identifier isEqualToString:@"AlarmListToEditAlarm"])
+    {
         AddEditAlarmViewController *controller = (AddEditAlarmViewController *)segue.destinationViewController;
         controller.indexOfAlarmToEdit = tableView.indexPathForSelectedRow.row;
         controller.editMode = YES;
@@ -161,6 +163,11 @@
         enabledSwitch = [[UISwitch alloc]
                          initWithFrame:
                          CGRectMake(200,20,170,40)];
+        enabledSwitch.tag = indexPath.row;
+        [enabledSwitch addTarget:self
+                            action:@selector(toggleAlarmEnabledSwitch:)
+                  forControlEvents:UIControlEventTouchUpInside];
+        
 		[cell.contentView addSubview:enabledSwitch];
         
         [enabledSwitch setOn:enabled];
@@ -172,6 +179,63 @@
 	return cell;
 }
 
+-(void)toggleAlarmEnabledSwitch:(id)sender
+{
+    UISwitch *mySwitch = (UISwitch *)sender;
+    
+    if(mySwitch.isOn == NO)
+    {
+        UIApplication *app = [UIApplication sharedApplication];
+        NSArray *eventArray = [app scheduledLocalNotifications];
+        AlarmObject *currentAlarm = [self.listOfAlarms objectAtIndex:mySwitch.tag];
+        currentAlarm.enabled = NO;
+        for (int i=0; i<[eventArray count]; i++)
+        {
+            UILocalNotification* oneEvent = [eventArray objectAtIndex:i];
+            NSDictionary *userInfoCurrent = oneEvent.userInfo;
+            NSString *uid=[NSString stringWithFormat:@"%@",[userInfoCurrent valueForKey:@"notificationID"]];
+            if ([uid isEqualToString:[NSString stringWithFormat:@"%i",mySwitch.tag]])
+            {
+                //Cancelling local notification            
+                [app cancelLocalNotification:oneEvent];
+                break;
+            }
+        }
+        
+    }
+    else if(mySwitch.isOn == YES)
+    {
+        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+        AlarmObject *currentAlarm = [self.listOfAlarms objectAtIndex:mySwitch.tag];
+        currentAlarm.enabled = YES;
+        if (!localNotification)
+            return;
+        
+        // Current date
+        //NSDate *date = [NSDate date];
+        
+        // Add one minute to the current time
+        //NSDate *dateToFire = timeToSetOff.date;
+        
+        localNotification.repeatInterval = NSDayCalendarUnit;
+        [localNotification setFireDate:currentAlarm.timeToSetOff];
+        [localNotification setTimeZone:[NSTimeZone defaultTimeZone]];
+        // Setup alert notification
+        [localNotification setAlertBody:@"Alarm" ];
+        [localNotification setAlertAction:@"Open App"];
+        [localNotification setHasAction:YES];
+        
+        
+        NSNumber* uidToStore = [NSNumber numberWithInt:currentAlarm.notificationID];
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:uidToStore forKey:@"notificationID"];
+        localNotification.userInfo = userInfo;
+        
+        // Schedule the notification
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    }
+    NSData *alarmListData2 = [NSKeyedArchiver archivedDataWithRootObject:self.listOfAlarms];
+    [[NSUserDefaults standardUserDefaults] setObject:alarmListData2 forKey:@"AlarmListData"];
+}
 //
 // dealloc
 //
