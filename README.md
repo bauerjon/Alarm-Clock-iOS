@@ -3,7 +3,7 @@ Alarm-Clock-iOS
 
 -Supports Mutiple Alarm Clocks
 
--Easy to add your own featurs
+-Easy to add your own features
 
 -Great base alarm clock for alarm clock apps
 
