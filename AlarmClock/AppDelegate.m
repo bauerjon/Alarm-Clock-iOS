@@ -10,6 +10,17 @@
 @implementation AppDelegate
 
 @synthesize player;
+
+- (void)setupWindow
+{
+	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+	HomeViewController *rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"HomeView"];
+	rootViewController.alarmGoingOff = YES;
+	self.window.rootViewController = rootViewController;
+	[self.window makeKeyAndVisible];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     //Prevents screen from locking
@@ -19,12 +30,7 @@
     
     if (localNotif)
     {
-        self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-        HomeViewController *rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"HomeView"];
-        rootViewController.alarmGoingOff = YES;
-        self.window.rootViewController = rootViewController;
-        [self.window makeKeyAndVisible];
+        [self setupWindow];
     }
         
     return YES;
@@ -39,12 +45,7 @@
     [self.player prepareToPlay];
     [self.player play];
     
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    HomeViewController *rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"HomeView"];
-    rootViewController.alarmGoingOff = YES;
-    self.window.rootViewController = rootViewController;
-    [self.window makeKeyAndVisible];
+	[self setupWindow];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
